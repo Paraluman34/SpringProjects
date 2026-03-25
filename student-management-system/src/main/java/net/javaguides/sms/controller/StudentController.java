@@ -54,12 +54,16 @@ public class StudentController {
 		existingStudent.setFirstName(student.getFirstName());
 		existingStudent.setLastName(student.getLastName());
 		existingStudent.setEmail(student.getEmail());
-		//baka na 
+		
 		//save updated student object
 		studentService.updateStudent(existingStudent);
-		return "redirect:/students";
-		
+		return "redirect:/students";	
+	}	
+	   //handle method to handle delete student request
+	
+	@PostMapping("/students/delete/{id}")
+	public String deleteStudent(@PathVariable Long id) {
+		studentService.deleteStudentById(id);
+		 return "redirect:/students";
 	}
-	
-	
 }

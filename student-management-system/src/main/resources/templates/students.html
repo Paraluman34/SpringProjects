@@ -55,7 +55,14 @@
 			<td>
 				                      <!-- The following is the standard to get id-->
 				<a th:href = "@{/students/edit/{id}(id=${student.id})}"
-				class = "btn btn-primary">Update </a>		
+				class = "btn btn-primary">Update </a>
+				<!--this is the code from tutorial and after this he uses @GetMapping for the controller so I was wondering, why not use POST-since you are updating the db-->
+				<!--<a th:href = "@{/students/{id}(id=${student.id})}"
+				class = "btn btn-danger">Delete </a>	-->
+				<form th:action="@{/students/delete/{id}(id=${student.id})}" method="post" style="display:inline;">
+				<button type="submit" class= "btn btn-danger">Delete</button>
+				
+				</td>
 			</tr>		
 		</tbody>		
 		</table>
