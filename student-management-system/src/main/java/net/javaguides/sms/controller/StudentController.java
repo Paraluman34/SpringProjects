@@ -1,5 +1,4 @@
 package net.javaguides.sms.controller;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +19,7 @@ public class StudentController {
 	}
 	//handler method  to handle list students and return mode and view
 	@GetMapping("/students")
-	
-	//Why parameters is Model model? Model is used to send data
+
 	public String listStudents(Model model ) {
 		model.addAttribute("students", studentService.getAllStudents());
 		return "students";	
@@ -47,7 +45,7 @@ public class StudentController {
 	}
 	
 	@PostMapping("/students/{id}")
-	public String updateStudent(@PathVariable Long id, @ModelAttribute("student") Student student, Model model) {
+	public String updateStudent(@PathVariable Long id, @ModelAttribute("student") Student student, Model model) {	
 		//get student from database by id
 		Student existingStudent =studentService.getStudentById(id);
 		existingStudent.setId(id);
