@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset = "ISO-8859-1">
+		<title> Student Grade Management System </title>
+		 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" 
+		 integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" 
+		 crossorigin="anonymous">
+	</head>
+	<body>
+		<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+		  <!-- Brand -->
+		  <a class="navbar-brand" href="#">Student Grade Management System</a>
+
+		  <!-- Toggler/collapsibe Button -->
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+		    <span class="navbar-toggler-icon"></span>
+		  </button>
+
+		  <!-- Navbar links -->
+		  <div class="collapse navbar-collapse" id="collapsibleNavbar">
+		    <ul class="navbar-nav">
+		      <li class="nav-item">
+		        <a class="nav-link" th:href="@{/students}">Student Grade Management</a>
+		      </li>
+		    </ul>
+		  </div>
+		</nav>
+		
+		<div class ="container">
+			<div class = "row">
+				<h1> List Students</h1>
+	   </div>
+	   <div class ="row">
+		<div class ="col-lg-3">
+			<a th:href = "@{students/new}" class ="btn btn-primary btn-sm mb-3">Add student </a>
+				
+			</div>
+		
+		</div>
+		<table class ="table table-stripped table-bordered">
+		<thead class = "table-dark">
+			<tr>
+				<th> Student First Name</th>
+				<th> Student Last Name</th>
+				<th> Student Grade</th>
+				<th> Actions</th>
+			</tr>		
+		</thead>
+		<tbody>
+			<tr th:each ="student: ${students}">
+			<td th:text="${student.firstName}"></td>
+			<td th:text="${student.lastName}"></td>
+			<td th:text="${student.grade}"></td>	
+			<td>
+				                      <!-- The following is the standard to get id-->
+				<a th:href = "@{/students/edit/{id}(id=${student.id})}"
+				class = "btn btn-primary">Update </a>
+				<!--this is the code from tutorial and after this he uses @GetMapping for the controller so I was wondering, why not use POST-since you are updating the db-->
+				<!--<a th:href = "@{/students/{id}(id=${student.id})}"
+				class = "btn btn-danger">Delete </a>	-->
+				<form th:action="@{/students/delete/{id}(id=${student.id})}" method="post" style="display:inline;">
+				<button type="submit" class= "btn btn-danger">Delete</button>
+				
+				</td>
+			</tr>		
+		</tbody>		
+		</table>
+	</body>
+	</html>
+	
