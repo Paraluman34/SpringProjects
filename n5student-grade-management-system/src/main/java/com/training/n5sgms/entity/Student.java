@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Max;
@@ -19,10 +20,12 @@ public class Student {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	@NotBlank(message = "First name is required")
+	@Pattern(regexp = "^[A-Za-z]+$", message = "First name must contain only letters")
 	@Column(name = "first_name", nullable=false)
 	private String firstName;
 	
 	@NotBlank(message = "Last name is required")
+	@Pattern(regexp = "^[A-Za-z]+$", message = "Last name must contain only letters")
 	@Column(name = "last_name", nullable=false)
 	private String lastName;
 	
@@ -30,15 +33,17 @@ public class Student {
     @Min(value = 1, message = "Grade must be at least 1")
     @Max(value = 100, message = "Grade must not exceed 100")
 	@Column(name = "grade")
-	private String grade;
-	
+	private Integer grade;
+	private String status;
+
 	public Student() {
 	}
-	public Student(String firstName, String lastName, String grade) {
+	public Student(String firstName, String lastName, Integer grade) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.grade = grade;
+		this.status = (grade >= 75) ? "Pass" : "Fail";
 	}
 	public Long getId() {
 		return id;
@@ -58,14 +63,17 @@ public class Student {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-	public String getGrade() {
+	public Integer getGrade() {
 		return grade;
 	}
-	public void setGrade(String grade) {
+	public void setGrade(Integer grade) {
 		this.grade = grade;
+		    this.grade = grade;
+            this.status = (grade >= 75) ? "Pass" : "Fail";
 	}
-	
-	
-
+	public String getStatus() {
+		return status;
+	}
 }
 
+//you can also use lombok

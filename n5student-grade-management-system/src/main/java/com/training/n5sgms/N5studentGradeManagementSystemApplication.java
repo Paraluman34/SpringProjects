@@ -11,3 +11,5 @@ public class N5studentGradeManagementSystemApplication {
 	}
 
 }
+
+//First, Connect to mysql and create a database name n5sgms before running this application

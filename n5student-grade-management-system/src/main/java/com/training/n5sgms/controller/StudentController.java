@@ -1,69 +1,52 @@
 package com.training.n5sgms.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import com.training.n5sgms.entity.Student;
 import com.training.n5sgms.service.StudentService;
 
-@Controller
+import jakarta.validation.Valid;
+
+@RestController
+@RequestMapping("/api/students")
 public class StudentController {
 
-	private StudentService studentService;
-	public StudentController(StudentService studentService) {
-		super();
-		this.studentService = studentService;
-	}
-	//handler method  to handle list students and return mode and view
-	
-	@GetMapping("/students")
-	public String listStudents(Model model ) {
-		model.addAttribute("students", studentService.getAllStudents());
-		return "students";	
-	}
-	
-	@GetMapping("/students/new")
-	public String createStudentForm(Model model) {
-		//create student object to hold student form data
-		Student student =new Student();
-		model.addAttribute("student", student);
-		return "create_student";	
-	}
-	//Why parameters is not Model model? @ModelAttribute is used to received data from html
-	@PostMapping("/students")
-	public String saveStudent(@ModelAttribute("student") Student student) {
-	    studentService.saveStudent(student);
-	    return "redirect:/students";
-	}
-	@GetMapping("/students/edit/{id}")
-	public String editStudentForm(@PathVariable Long id, Model model) {
-		model.addAttribute("student", studentService.getStudentById(id));
-		return "edit_student";		
-	}
-	
-	@PostMapping("/students/{id}")
-	public String updateStudent(@PathVariable Long id, @ModelAttribute("student") Student student, Model model) {	
-		//get student from database by id
-		Student existingStudent =studentService.getStudentById(id);
-		existingStudent.setId(id);
-		existingStudent.setFirstName(student.getFirstName());
-		existingStudent.setLastName(student.getLastName());
-		existingStudent.setGrade(student.getGrade());
-		
-		//save updated student object
-		studentService.updateStudent(existingStudent);
-		return "redirect:/students";	
-	}	
-	   //handle method to handle delete student request
-	
-	@PostMapping("/students/delete/{id}")
-	public String deleteStudent(@PathVariable Long id) {
-		studentService.deleteStudentById(id);
-		 return "redirect:/students";
-	}
-}
+    private final StudentService studentService;
 
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
+    }
+
+    // GET student by ID
+    // URL: http://localhost:8090/api/students/1 tested in postman 200 OK
+    @GetMapping("/{id}")
+    public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
+        Student student = studentService.getStudentById(id);
+        return ResponseEntity.ok(student);
+    }
+
+    // POST create new student
+    // URL: http://localhost:8090/api/students tested in postman 200 OK
+    @PostMapping
+    public ResponseEntity<Student> createStudent(@Valid @RequestBody Student student) {
+        Student savedStudent = studentService.saveStudent(student);
+        return ResponseEntity.ok(savedStudent);
+    }
+
+    // PUT update student
+    // URL: http://localhost:8090/api/students/{id} tested in postman 200 OK
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Student> updateStudent(@PathVariable Long id, @Valid @RequestBody Student student) {
+        Student updatedStudent = studentService.updateStudent(id, student);
+        return ResponseEntity.ok(updatedStudent);
+    }
+
+    // DELETE student
+    // URL: http://localhost:8090/api/students/{id} tested in postman 204 No content
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
+        studentService.deleteStudentById(id);
+        return ResponseEntity.noContent().build();
+    }
+}
